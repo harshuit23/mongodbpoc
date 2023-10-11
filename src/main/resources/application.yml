@@ -1,0 +1,63 @@
+
+spring:
+  application:
+    name: 'MongodbPOC'
+  cloud:
+    gcp:
+      config:
+        enabled: false
+      sql:
+        enabled: false
+  jpa: 
+    generate-ddl: false
+  data:
+    mongodb:
+      uri: mongodb+srv://appuser1:<password>@psctestcluster.a8r8j.mongodb.net/?retryWrites=true&w=majority
+      database: faapoc
+info:
+  app:
+    name: '@project.artifactId@'
+    description: '@project.name@'
+    version: '@project.version@'
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+        - info
+        - metrics
+        - heapdump
+        - threaddump
+        - scheduledtasks
+        - refresh
+        - env
+        - loggers
+        #- bus-refresh
+        #- bus-env
+  endpoint:
+    health:
+      show-details: ALWAYS
+    metrics:
+      enabled: false
+
+
+logging:
+  level:
+    liquibase:  INFO
+    splunk_metrics: INFO
+    com:
+      google: INFO
+      bns: DEBUG
+    io:
+      #micrometer: TRACE
+      netty: INFO
+    org:
+      springframework: 
+        security: INFO
+server: 
+  port: 8989
+  error:
+    include-exception: false
+    include-stacktrace: never
