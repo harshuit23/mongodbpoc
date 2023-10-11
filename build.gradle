@@ -1,0 +1,209 @@
+import org.apache.tools.ant.filters.*
+
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' version '2.6.8'
+       id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+
+    // Helper for checking if newer versions of dependencies exist
+    id 'com.github.ben-manes.versions' version '0.22.0'
+       id 'com.github.davidmc24.gradle.plugin.avro' version '1.5.0'
+
+    id 'eclipse'
+    id "jacoco"
+}
+
+ext {
+       set('springCloudVersion', '2021.0.1')
+       set('stackdriverVersion', '1.8.6')
+       set('lombokVersion', '1.18.20')
+       set('grpcVersion', '1.44.1')
+       set('nettyVersion', '4.1.72.Final')
+       set('boringVersion', '2.0.46.Final')
+       set('jupiterVersion', '5.7.2')
+}
+
+description 'mongodb-poc'
+group = 'faa'
+
+try {
+    version = new File('/accp/version').text
+} catch (FileNotFoundException e) {
+    version = '1.0.0'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+  
+       mavenCentral()
+        
+}
+
+dependencyManagement {
+       imports {
+             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+             mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:3.0.0"
+       }
+} 
+
+dependencies {
+       implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+   implementation("org.projectlombok:lombok:${lombokVersion}")
+annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+       // Black Duck FORCED dependencies
+       implementation('com.fasterxml.jackson.core:jackson-annotations:2.10.0') 
+       implementation('com.fasterxml.jackson.core:jackson-core:2.10.0') 
+       implementation('com.fasterxml.jackson.core:jackson-databind:2.10.0') 
+
+    implementation("org.apache.avro:avro:1.11.0")
+    implementation("commons-io:commons-io:2.5")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+       
+       implementation("com.google.cloud:spring-cloud-gcp-starter")
+       implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
+    implementation("com.google.cloud:google-cloud-bigquery")
+       implementation("com.google.cloud:google-cloud-monitoring")
+    implementation("com.google.cloud:google-cloud-dlp")
+    implementation("com.google.cloud:google-cloud-logging-logback") // :0.120.4-alpha
+    
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.4'
+  
+       
+       implementation "io.grpc:grpc-netty:$grpcVersion"
+    implementation "io.netty:netty-tcnative-boringssl-static:$boringVersion"
+    implementation "io.netty:netty-tcnative:$boringVersion"
+    implementation "io.grpc:grpc-netty-shaded:$grpcVersion"
+       implementation "io.netty:netty-handler:$nettyVersion"
+
+       implementation("io.grpc:grpc-alts") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       
+       implementation("io.grpc:grpc-context") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       implementation("io.grpc:grpc-protobuf") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       implementation("io.grpc:grpc-auth") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       implementation("io.grpc:grpc-api") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       implementation("io.grpc:grpc-grpclb") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       implementation("io.grpc:grpc-core") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       implementation("io.grpc:grpc-stub") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       implementation("io.grpc:grpc-census") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       implementation("io.grpc:grpc-protobuf-lite") {
+      version {
+         strictly "$grpcVersion"
+      }
+       }
+       
+       implementation('org.springframework.boot:spring-boot-starter-security')
+    implementation('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.0.RELEASE')
+       
+
+       
+//     compile("io.micrometer:micrometer-registry-stackdriver:${stackdriverVersion}")
+//     compile("io.micrometer:micrometer-core:${stackdriverVersion}")
+       
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.59'
+    implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.59'
+
+       implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
+       implementation "com.h2database:h2" // Failover database in case of DBR
+       implementation "javax.validation:validation-api"
+       
+testImplementation("org.projectlombok:lombok:${lombokVersion}")
+testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+       
+    testImplementation 'org.hamcrest:hamcrest-all:1.3'
+    testImplementation 'org.mockito:mockito-core:2.15.0'
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('io.projectreactor:reactor-test')
+    
+    testImplementation "org.junit.jupiter:junit-jupiter:${jupiterVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${jupiterVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${jupiterVersion}"
+
+    testImplementation "org.junit.platform:junit-platform-engine:1.7.0"
+    testImplementation "org.junit.platform:junit-platform-commons:1.7.0"
+    testImplementation "org.junit.platform:junit-platform-runner:1.7.0"
+    
+
+}
+
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': project.description, 'Implementation-Version': project.version
+    }
+}
+
+processResources {
+       with copySpec {
+             from 'src/main/resources'
+             include 'application.yml'
+                    filter(ReplaceTokens, tokens: [
+                    'project.artifactId': project.name,
+                    'project.name': project.description,
+                    'project.version': project.version.toString()
+             ]) 
+       }
+       
+}
+
+test {
+  environment "GOOGLE_APPLICATION_CREDENTIALS", file('src/test/resources/faa-fsl-1531857334897-cf9b217c6729.json')
+}
+
+// Configure Jacoco Coverage verification during build process. Sonarqube will also compute and check coverage for the project
+def coverageExclusions = [
+        // Exclude generated code, domain objects and configuration from coverage reports
+             '*/Application*',
+             '*/avro/**/*',
+             '*/config/*',
+             '*/model/*',
+             '*/data/*'
+]
+
+
+test {
+    useJUnitPlatform()
+       finalizedBy jacocoTestReport // report is always generated after tests run
+}
