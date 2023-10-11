@@ -13,7 +13,7 @@ spring:
     generate-ddl: false
   data:
     mongodb:
-      uri: mongodb+srv://appuser1:<password>@psctestcluster.a8r8j.mongodb.net/?retryWrites=true&w=majority
+      uri: mongodb+srv://appuser1:<password>@xxxxxxx.net/?retryWrites=true&w=majority
       database: faapoc
 info:
   app:
