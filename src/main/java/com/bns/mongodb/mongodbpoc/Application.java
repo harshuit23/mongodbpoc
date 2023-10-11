@@ -19,6 +19,7 @@ public class Application {
                              //System.setProperty("javax.net.debug", "all");
 
                              Security.addProvider(new BouncyCastleProvider());
+                             System.setProperty("java.net.preferIPv4Stack" , "true");
 
                              new SpringApplicationBuilder(Application.class).run(args);
               }

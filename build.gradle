@@ -66,8 +66,8 @@ annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
        
-       implementation("com.google.cloud:spring-cloud-gcp-starter")
-       implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
+   //    implementation("com.google.cloud:spring-cloud-gcp-starter")
+     //  implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
     implementation("com.google.cloud:google-cloud-bigquery")
        implementation("com.google.cloud:google-cloud-monitoring")
     implementation("com.google.cloud:google-cloud-dlp")
@@ -135,7 +135,7 @@ annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
        }
        
        implementation('org.springframework.boot:spring-boot-starter-security')
-    implementation('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.0.RELEASE')
+   // implementation('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.0.RELEASE')
        
 
        
@@ -188,9 +188,6 @@ processResources {
        
 }
 
-test {
-  environment "GOOGLE_APPLICATION_CREDENTIALS", file('src/test/resources/faa-fsl-1531857334897-cf9b217c6729.json')
-}
 
 // Configure Jacoco Coverage verification during build process. Sonarqube will also compute and check coverage for the project
 def coverageExclusions = [
